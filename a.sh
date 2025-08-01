@@ -32,51 +32,40 @@ else
 fi
 
 # Hiển thị menu lựa chọn hệ điều hành
-echo "Chọn hệ điều hành để chạy VM:"
-echo "1. Windows 10"
-echo "2. Windows 11"
+echo "Chọn hệ điều hành để chạy VM, một số hđh sẽ được cập nhật trong tương lai:"
+echo "1. Windows 11 23H2 (22631.2861) bản gốc chính chủ M$"
+echo "2. Ubuntu 22.04 LTS (có quyền SSH, cài Tài Scale để chạy SSH và mật khẩu là 1; username runner)"
+echo "3. Windows 11 24H2 gốc"
+echo "4. UEFI 4 Windows OS (Windows 11 23H2; Windows 10 22H2; Windows 8.1; Windows 7)"
 
-read -p "Nhập lựa chọn của bạn (1 hoặc 2): " user_choice
+read -p "Nhập lựa chọn của bạn: " user_choice
 
 if [ "$user_choice" -eq 1 ]; then
-    echo "Bạn đã chọn Windows 10."
-    file_url="https://github.com/jshruwyd/discord-vps-creator/raw/refs/heads/main/a.py"
-    file_name="a.py"
+    echo "Bạn đã chọn Windows 11 23H2 (22631.2861)."
+    file_url="https://api.cloud.hashicorp.com/vagrant-archivist/v1/object/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiIyMWZlYWNmYi0xMWY5LTRkMTEtOGM2OC0xMTQ5YmY1NmY2YzIiLCJtb2RlIjoiciIsImZpbGVuYW1lIjoid2luMTFtb2RyZHB3Zl8xLjBfcWVtdV9hbWQ2NC5ib3gifQ.WYMn2onERXAiIk9BHyZtMJZZirZS6H9tzJAC5Sj8KIA"
+    file_name="/mnt/a.qcow2"
 elif [ "$user_choice" -eq 2 ]; then
-    echo "Bạn đã chọn Windows 11."
-    file_url="https://github.com/jshruwyd/discord-vps-creator/raw/refs/heads/main/b.py"
-    file_name="b.py"
+    echo "Bạn đã chọn Ubuntu 22.04 LTS."
+    file_url="https://api.cloud.hashicorp.com/vagrant-archivist/v1/object/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiI1ZGQ1NmM1OC04ZDQ4LTQ0NzgtOWE1Zi0wYjNmYzgyYzRiNTkiLCJtb2RlIjoiciIsImZpbGVuYW1lIjoidWJ1bnR1c2VydmVyMjJfMC4wX3FlbXVfYW1kNjQuYm94In0.tYprxQPqKwTPaqlfna0u7rIlpD3WYbK03haABvT3KQk"
+    file_name="/mnt/a.qcow2"
+elif [ "$user_choice" -eq 3 ]; then
+    echo "Bạn đã chọn Windows 11 24H2 gốc."
+    file_url="https://api.cloud.hashicorp.com/vagrant-archivist/v1/object/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJsaW51eHVzZXJzZmFrZS9XaW5kb3dzMTEyNEgyLzI0LjIvV2luMTEyNEgyL2QyOTQwOWVhLWFjY2MtMTFlZi05NGM4LTVhOGNhNzBiNzRhNSIsIm1vZGUiOiJyIiwiZmlsZW5hbWUiOiJXaW5kb3dzMTEyNEgyXzI0LjJfV2luMTEyNEgyX2FtZDY0LmJveCJ9.7DD39XJxF8PjIdhHcuEABTPiZbPgq_CEgVHrV9ka_eg"
+    file_name="/mnt/a.qcow2"
+elif [ "$user_choice" -eq 4 ]; then
+    echo "Bạn đã chọn UEFI 4 Windows OS."
+    file_url="https://www.dropbox.com/scl/fi/cm4kqg5f5iis40bzmy7yo/windualboot.qcow2?rlkey=0aybiajbpqve86lpjvu5ah9x2&dl=1"
+    file_name="/mnt/a.qcow2"
 else
     echo "Lựa chọn không hợp lệ. Vui lòng chạy lại script và chọn 1 hoặc 2."
     exit 1
 fi
 
-# Tải file Python
+# Tải file Qcow2
 echo "Đang tải file $file_name từ $file_url..."
-wget -O "/mnt/$file_name" "$file_url"
+wget -O "$file_name" "$file_url"
 if [ $? -ne 0 ]; then
     echo "Lỗi khi tải file. Vui lòng kiểm tra kết nối mạng hoặc URL."
-    exit 1
-fi
-
-# Cài đặt gdown và chạy file Python
-echo "Đang cài đặt gdown và chạy file $file_name..."
-pip install gdown
-python3 "/mnt/$file_name"
-if [ $? -ne 0 ]; then
-    echo "Lỗi khi chạy file Python. Vui lòng kiểm tra lại."
-    exit 1
-fi
-
-# Chờ 3 phút sau khi chạy file Python
-echo "Chờ 5s trước khi tiếp tục..."
-sleep 5
-
-# Giải nén các file .zip trong thư mục /mnt
-echo "Đang giải nén tất cả các file .zip trong /mnt..."
-unzip '/mnt/*.zip' -d /mnt/
-if [ $? -ne 0 ]; then
-    echo "Lỗi khi giải nén file. Vui lòng kiểm tra lại file tải về."
     exit 1
 fi
 
@@ -85,7 +74,7 @@ echo "Đang khởi chạy máy ảo..."
 echo "Đã khởi động VM thành công vui lòng tự cài ngrok và mở cổng 5900"
 sudo cpulimit -l 80 -- sudo kvm \
     -cpu host,+topoext,hv_relaxed,hv_spinlocks=0x1fff,hv-passthrough,+pae,+nx,kvm=on,+svm \
-    -smp 2,cores=4 \
+    -smp 2,cores=2 \
     -M q35,usb=on \
     -device usb-tablet \
     -m 8G \
@@ -97,8 +86,7 @@ sudo cpulimit -l 80 -- sudo kvm \
     -device virtio-serial-pci \
     -device virtio-rng-pci \
     -enable-kvm \
-    -hda /mnt/a.qcow2 \
+    -drive file=/mnt/a.qcow2 \
     -drive if=pflash,format=raw,readonly=off,file=/usr/share/ovmf/OVMF.fd \
     -uuid e47ddb84-fb4d-46f9-b531-14bb15156336 \
     -vnc :0
-    

@@ -50,31 +50,7 @@ elif [ "$user_choice" -eq 2 ]; then
     file_name="/mnt/a.qcow2"
 elif [ "$user_choice" -eq 3 ]; then
     echo "Bạn đã chọn Windows 11 24H2 gốc."
-    file_url="https://api.cloud.hashicorp.com/vagrant-archivist/v1/object/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJsaW51eHVzZXJzZmFrZS9XaW5kb3dzMTEyNEgyLzI0LjIvV2luMTEyNEgyL2QyOTQwOWVhLWFjY2MtMTFlZi05NGM4LTVhOGNhNzBiNzRhNSIsIm1vZGUiOiJyIiwiZmlsZW5hbWUiOiJXaW5kb3dzMTEyNEgyXzI0LjJfV2luMTEyNEgyX2FtZDY0LmJveCJ9.7DD39XJxF8PjIdhHcuEABTPiZbPgq_CEgVHrV9ka_eg"
-    file_name="/mnt/a.qcow2"
-elif [ "$user_choice" -eq 4 ]; then
-    echo "Bạn đã chọn UEFI 4 Windows OS."
-    file_url="https://www.dropbox.com/scl/fi/cm4kqg5f5iis40bzmy7yo/windualboot.qcow2?rlkey=0aybiajbpqve86lpjvu5ah9x2&dl=1"
-    file_name="/mnt/a.qcow2"
-else
-    echo "Lựa chọn không hợp lệ. Vui lòng chạy lại script và chọn 1 hoặc 2."
-    exit 1
-fi
-
-# Tải file Qcow2
-echo "Đang tải file $file_name từ $file_url..."
-wget -O "$file_name" "$file_url"
-if [ $? -ne 0 ]; then
-    echo "Lỗi khi tải file. Vui lòng kiểm tra kết nối mạng hoặc URL."
-    exit 1
-fi
-
-# Khởi chạy máy ảo với KVM
-echo "Đang khởi chạy máy ảo..."
-echo "Đã khởi động VM thành công vui lòng tự cài ngrok và mở cổng 5900"
-sudo cpulimit -l 80 -- sudo kvm \
-    -cpu host,+topoext,hv_relaxed,hv_spinlocks=0x1fff,hv-passthrough,+pae,+nx,kvm=on,+svm \
-    -smp 2,cores=2 \
+    file_url="https://api.cloud.hashicorp.com/vagrant-archivist/v1/object/e4 \
     -M q35,usb=on \
     -device usb-tablet \
     -m 8G \
